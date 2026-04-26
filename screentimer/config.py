@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Optional
 
@@ -15,6 +16,7 @@ class AppConfig:
     lock_interval_mins: int
     auto_unlock_mins: int
     password_hash: str
+    daily_limit_mins: int = 0
 
     def check_password(self, password: str) -> bool:
         return hash_password(password) == self.password_hash
@@ -26,6 +28,7 @@ class ConfigStore:
             appdata = Path(os.environ.get("APPDATA", str(Path.home())))
             config_dir = appdata / "ScreenTimer"
         self._path = Path(config_dir) / "config.json"
+        self._usage_path = Path(config_dir) / "daily_usage.json"
 
     def load(self) -> Optional[AppConfig]:
         if not self._path.exists():
@@ -36,6 +39,7 @@ class ConfigStore:
                 lock_interval_mins=data["lock_interval_mins"],
                 auto_unlock_mins=data["auto_unlock_mins"],
                 password_hash=data["password_hash"],
+                daily_limit_mins=data.get("daily_limit_mins", 0),
             )
         except (json.JSONDecodeError, KeyError):
             return None
@@ -47,6 +51,26 @@ class ConfigStore:
                 "lock_interval_mins": config.lock_interval_mins,
                 "auto_unlock_mins": config.auto_unlock_mins,
                 "password_hash": config.password_hash,
+                "daily_limit_mins": config.daily_limit_mins,
             }, indent=2),
+            encoding="utf-8",
+        )
+
+    def load_daily_used_secs(self) -> int:
+        """Returns accumulated active seconds for today; resets if the date changed."""
+        if not self._usage_path.exists():
+            return 0
+        try:
+            data = json.loads(self._usage_path.read_text(encoding="utf-8"))
+            if data.get("date") == str(date.today()):
+                return int(data.get("used_secs", 0))
+        except (json.JSONDecodeError, KeyError, ValueError):
+            pass
+        return 0
+
+    def save_daily_used_secs(self, used_secs: int) -> None:
+        self._usage_path.parent.mkdir(parents=True, exist_ok=True)
+        self._usage_path.write_text(
+            json.dumps({"date": str(date.today()), "used_secs": used_secs}, indent=2),
             encoding="utf-8",
         )
