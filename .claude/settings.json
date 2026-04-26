@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/sandy_tu/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/subagent-driven-development/**)",
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(pytest --version)",
+      "Bash(pyinstaller --version)",
+      "Bash(python -m pytest tests/test_config.py -v)",
+      "Bash(python3 -m pytest tests/test_config.py -v)",
+      "Bash(python3 -m pytest tests/test_config.py -v --tb=short)",
+      "Bash(python -m pip install pytest --quiet)",
+      "Bash(python3 -m pip install pytest --quiet)",
+      "Bash(python3)",
+      "Bash(cat)",
+      "Bash(python3 /tmp/verification.py)",
+      "Bash(pytest tests/test_config.py -v)",
+      "Bash(python3 -c \"from screentimer.config import AppConfig, ConfigStore, hash_password; import inspect; print\\('hash_password:', inspect.signature\\(hash_password\\)\\); print\\('AppConfig fields:', [f.name for f in AppConfig.__dataclass_fields__.values\\(\\)]\\); print\\('ConfigStore methods:', [m for m in dir\\(ConfigStore\\) if not m.startswith\\('_'\\)]\\)\")",
+      "Bash(python3 -m pytest tests/test_config.py --cov=screentimer/config --cov-report=term-missing)",
+      "Bash(python -m pytest tests/test_timer.py -v)",
+      "Bash(python3 -m pytest tests/test_timer.py -v)",
+      "Bash(python3 -m pytest -v)",
+      "Bash(python3 -m pytest -v --tb=short)",
+      "Bash(pip3 install *)",
+      "Bash(python3 -m pytest tests/ -v)",
+      "Bash(python -m pip install pytest)",
+      "Bash(python -m pip install pytest pyinstaller --quiet)",
+      "Bash(python3 -m pip install pytest pyinstaller --quiet)",
+      "Bash(python3 -m py_compile screentimer/overlay.py)",
+      "Bash(python3 -m py_compile /home/sandy_tu/screentimer/screentimer/settings.py)",
+      "Bash(python3 -c \"from screentimer.settings import SettingsWindow; from screentimer.config import AppConfig, ConfigStore, hash_password; print\\('All imports successful'\\)\")",
+      "Bash(python -m pytest tests/ -v)",
+      "Bash(python3 -m pip install -q pytest)",
+      "Bash(python -m pytest -v)",
+      "Bash(pytest -v)",
+      "Bash(python -c \"from screentimer.main import main; print\\('Import successful'\\)\")",
+      "Bash(python3 -c \"from screentimer.main import main; print\\('Import successful'\\)\")",
+      "Bash(python3 -m pip install -q pytest tkinter)"
+    ]
+  }
+}
