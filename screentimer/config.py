@@ -30,12 +30,15 @@ class ConfigStore:
     def load(self) -> Optional[AppConfig]:
         if not self._path.exists():
             return None
-        data = json.loads(self._path.read_text(encoding="utf-8"))
-        return AppConfig(
-            lock_interval_mins=data["lock_interval_mins"],
-            auto_unlock_mins=data["auto_unlock_mins"],
-            password_hash=data["password_hash"],
-        )
+        try:
+            data = json.loads(self._path.read_text(encoding="utf-8"))
+            return AppConfig(
+                lock_interval_mins=data["lock_interval_mins"],
+                auto_unlock_mins=data["auto_unlock_mins"],
+                password_hash=data["password_hash"],
+            )
+        except (json.JSONDecodeError, KeyError):
+            return None
 
     def save(self, config: AppConfig) -> None:
         self._path.parent.mkdir(parents=True, exist_ok=True)

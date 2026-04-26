@@ -12,7 +12,7 @@ def main():
     store = ConfigStore()
     timer: list[TimerThread] = []  # mutable container so callbacks can reference it
 
-    # Re-show SettingsWindow is out of scope; root stays hidden after Start
+    # Destroying settings_win destroys root too (it's a Toplevel child), exiting the app.
     settings_win = tk.Toplevel(root)
     overlay: list[LockOverlay] = []
 

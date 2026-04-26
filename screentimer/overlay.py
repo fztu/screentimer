@@ -73,12 +73,12 @@ class LockOverlay:
     def _tick(self):
         if not self._visible:
             return
-        mins, secs = divmod(self._countdown_remaining, 60)
-        self._countdown_label.config(text=f"Unlocking in {mins:02d}:{secs:02d}")
         if self._countdown_remaining <= 0:
             self.hide()
             self._on_auto_unlock()
             return
+        mins, secs = divmod(self._countdown_remaining, 60)
+        self._countdown_label.config(text=f"Unlocking in {mins:02d}:{secs:02d}")
         self._countdown_remaining -= 1
         self._countdown_job = self._win.after(1000, self._tick)
 
