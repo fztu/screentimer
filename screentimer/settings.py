@@ -1,6 +1,9 @@
+import sys
 import tkinter as tk
 from tkinter import messagebox
 from screentimer.config import AppConfig, ConfigStore, hash_password
+
+_FONT_FAMILY = "Helvetica Neue" if sys.platform == "darwin" else "Segoe UI"
 
 
 class SettingsWindow:
@@ -25,32 +28,32 @@ class SettingsWindow:
         root = self._root
         pad = {"padx": 16, "pady": 6}
 
-        tk.Label(root, text="ScreenTimer", font=("Segoe UI", 18, "bold")).grid(
+        tk.Label(root, text="ScreenTimer", font=(_FONT_FAMILY, 18, "bold")).grid(
             row=0, column=0, columnspan=2, pady=(20, 10))
 
         tk.Label(root, text="Lock interval (minutes):").grid(row=1, column=0, sticky="e", **pad)
         self._interval_var = tk.StringVar(value="30")
         tk.Spinbox(root, from_=1, to=480, textvariable=self._interval_var,
-                   width=6, font=("Segoe UI", 11)).grid(row=1, column=1, sticky="w", **pad)
+                   width=6, font=(_FONT_FAMILY, 11)).grid(row=1, column=1, sticky="w", **pad)
 
         tk.Label(root, text="Auto-unlock delay (minutes):").grid(row=2, column=0, sticky="e", **pad)
         self._auto_var = tk.StringVar(value="5")
         tk.Spinbox(root, from_=1, to=60, textvariable=self._auto_var,
-                   width=6, font=("Segoe UI", 11)).grid(row=2, column=1, sticky="w", **pad)
+                   width=6, font=(_FONT_FAMILY, 11)).grid(row=2, column=1, sticky="w", **pad)
 
         tk.Label(root, text="Daily screen limit (mins, 0=off):").grid(row=3, column=0, sticky="e", **pad)
         self._daily_var = tk.StringVar(value="0")
         tk.Spinbox(root, from_=0, to=1439, textvariable=self._daily_var,
-                   width=6, font=("Segoe UI", 11)).grid(row=3, column=1, sticky="w", **pad)
+                   width=6, font=(_FONT_FAMILY, 11)).grid(row=3, column=1, sticky="w", **pad)
 
         tk.Label(root, text="Parent password:").grid(row=4, column=0, sticky="e", **pad)
-        self._pw_entry = tk.Entry(root, show="*", font=("Segoe UI", 11), width=20)
+        self._pw_entry = tk.Entry(root, show="*", font=(_FONT_FAMILY, 11), width=20)
         self._pw_entry.grid(row=4, column=1, sticky="w", **pad)
 
-        self._pw_hint = tk.Label(root, text="", font=("Segoe UI", 9), fg="#777777")
+        self._pw_hint = tk.Label(root, text="", font=(_FONT_FAMILY, 9), fg="#777777")
         self._pw_hint.grid(row=5, column=0, columnspan=2)
 
-        self._action_btn = tk.Button(root, text="Start", font=("Segoe UI", 12, "bold"),
+        self._action_btn = tk.Button(root, text="Start", font=(_FONT_FAMILY, 12, "bold"),
                                      width=12, command=self._on_action_click)
         self._action_btn.grid(row=6, column=0, columnspan=2, pady=(14, 20))
 
@@ -87,13 +90,13 @@ class SettingsWindow:
         result = [False]
 
         tk.Label(dialog, text="Enter parent password to change settings:",
-                 font=("Segoe UI", 11)).pack(padx=20, pady=(16, 8))
+                 font=(_FONT_FAMILY, 11)).pack(padx=20, pady=(16, 8))
 
-        entry = tk.Entry(dialog, show="*", font=("Segoe UI", 11), width=20)
+        entry = tk.Entry(dialog, show="*", font=(_FONT_FAMILY, 11), width=20)
         entry.pack(padx=20, pady=(0, 4))
         entry.focus_set()
 
-        error_lbl = tk.Label(dialog, text="", fg="#ff4444", font=("Segoe UI", 10))
+        error_lbl = tk.Label(dialog, text="", fg="#ff4444", font=(_FONT_FAMILY, 10))
         error_lbl.pack()
 
         def check():
@@ -106,7 +109,7 @@ class SettingsWindow:
 
         entry.bind("<Return>", lambda e: check())
         tk.Button(dialog, text="OK", command=check,
-                  font=("Segoe UI", 11)).pack(pady=(8, 16))
+                  font=(_FONT_FAMILY, 11)).pack(pady=(8, 16))
 
         self._root.wait_window(dialog)
         return result[0]

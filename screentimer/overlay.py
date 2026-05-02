@@ -1,4 +1,7 @@
+import sys
 import tkinter as tk
+
+_FONT_FAMILY = "Helvetica Neue" if sys.platform == "darwin" else "Segoe UI"
 
 
 class LockOverlay:
@@ -15,7 +18,10 @@ class LockOverlay:
 
         self._win = tk.Toplevel(root)
         self._win.withdraw()
-        self._win.overrideredirect(True)
+        if sys.platform == "darwin":
+            self._win.attributes("-fullscreen", True)
+        else:
+            self._win.overrideredirect(True)
         self._win.attributes("-topmost", True)
         self._win.configure(bg="black")
         self._win.protocol("WM_DELETE_WINDOW", lambda: None)
@@ -26,24 +32,24 @@ class LockOverlay:
     def _build_ui(self):
         w = self._win
 
-        self._title_label = tk.Label(w, text="Time for a break!", font=("Segoe UI", 36, "bold"),
+        self._title_label = tk.Label(w, text="Time for a break!", font=(_FONT_FAMILY, 36, "bold"),
                                       fg="white", bg="black")
         self._title_label.pack(pady=(120, 20))
 
-        self._countdown_label = tk.Label(w, text="", font=("Segoe UI", 18),
+        self._countdown_label = tk.Label(w, text="", font=(_FONT_FAMILY, 18),
                                           fg="#aaaaaa", bg="black")
         self._countdown_label.pack(pady=(0, 40))
 
         frame = tk.Frame(w, bg="black")
         frame.pack()
 
-        self._pw_entry = tk.Entry(frame, show="*", font=("Segoe UI", 14), width=20)
+        self._pw_entry = tk.Entry(frame, show="*", font=(_FONT_FAMILY, 14), width=20)
         self._pw_entry.pack(side="left", padx=(0, 10))
 
-        tk.Button(frame, text="Unlock", font=("Segoe UI", 12),
+        tk.Button(frame, text="Unlock", font=(_FONT_FAMILY, 12),
                   command=self._try_unlock).pack(side="left")
 
-        self._error_label = tk.Label(w, text="", font=("Segoe UI", 12),
+        self._error_label = tk.Label(w, text="", font=(_FONT_FAMILY, 12),
                                       fg="#ff4444", bg="black")
         self._error_label.pack(pady=(10, 0))
 
@@ -55,7 +61,10 @@ class LockOverlay:
         self._pw_entry.delete(0, tk.END)
         self._error_label.config(text="")
         w = self._win
-        w.geometry(f"{w.winfo_screenwidth()}x{w.winfo_screenheight()}+0+0")
+        if sys.platform == "darwin":
+            w.attributes("-fullscreen", True)
+        else:
+            w.geometry(f"{w.winfo_screenwidth()}x{w.winfo_screenheight()}+0+0")
         w.deiconify()
         w.lift()
         w.focus_force()
@@ -69,6 +78,8 @@ class LockOverlay:
         if self._countdown_job:
             self._win.after_cancel(self._countdown_job)
             self._countdown_job = None
+        if sys.platform == "darwin":
+            self._win.attributes("-fullscreen", False)
         self._win.grab_release()
         self._win.withdraw()
 
@@ -95,7 +106,10 @@ class LockOverlay:
         self._pw_entry.delete(0, tk.END)
         self._error_label.config(text="")
         w = self._win
-        w.geometry(f"{w.winfo_screenwidth()}x{w.winfo_screenheight()}+0+0")
+        if sys.platform == "darwin":
+            w.attributes("-fullscreen", True)
+        else:
+            w.geometry(f"{w.winfo_screenwidth()}x{w.winfo_screenheight()}+0+0")
         w.deiconify()
         w.lift()
         w.focus_force()

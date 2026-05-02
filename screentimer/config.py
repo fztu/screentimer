@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import sys
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -25,8 +26,14 @@ class AppConfig:
 class ConfigStore:
     def __init__(self, config_dir: Optional[Path] = None):
         if config_dir is None:
-            appdata = Path(os.environ.get("APPDATA", str(Path.home())))
-            config_dir = appdata / "ScreenTimer"
+            if sys.platform == "win32":
+                appdata = Path(os.environ.get("APPDATA", str(Path.home())))
+                config_dir = appdata / "ScreenTimer"
+            elif sys.platform == "darwin":
+                config_dir = Path.home() / "Library" / "Application Support" / "ScreenTimer"
+            else:
+                xdg = os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config"))
+                config_dir = Path(xdg) / "ScreenTimer"
         self._path = Path(config_dir) / "config.json"
         self._usage_path = Path(config_dir) / "daily_usage.json"
 
