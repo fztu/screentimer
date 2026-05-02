@@ -44,9 +44,12 @@ jobs:
         run: pip install -r requirements-dev.txt
 
       - name: Build executable
-        run: pyinstaller --onefile --windowed --name screentimer screentimer/main.py
+        run: pyinstaller --onedir --windowed --name screentimer screentimer/main.py
+
+      - name: Zip app bundle
+        run: ditto -c -k --sequesterRsrc --keepParent dist/screentimer.app dist/screentimer-macos.zip
 
       - name: Upload to release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/screentimer
+          files: dist/screentimer-macos.zip
